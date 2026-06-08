@@ -1352,7 +1352,7 @@ export const useHVACStore = create<HVACState>((set, get) => ({
 
   // Push Notifications (Step 13 - Real Expo + Supabase fallback)
   pushToken: null,
-  registerForPushNotifications: async () => {
+   registerForPushNotifications: async () => {
     try {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
@@ -1364,19 +1364,10 @@ export const useHVACStore = create<HVACState>((set, get) => ({
         console.log('[Notifications] Permission not granted for push');
         return;
       }
-      // Get Expo push token (for real push via Supabase/Edge or Expo service)
-      const tokenData = await Notifications.getExpoPushTokenAsync({
-        projectId: 'your-project-id-here', // Replace in real Expo app (from app.json or EAS)
-      });
-      const token = tokenData.data;
-      set({ pushToken: token });
-      console.log('[Notifications] Expo push token obtained (for future real push):', token.substring(0, 20) + '...');
-      if (isSupabaseConfigured()) {
-        console.log('[Supabase] Would save push token to user profile for targeted admin notifications');
-      }
+      console.log('[Notifications] Push permission granted (token registration temporarily disabled for stability)');
+      // Real token registration will be restored later with the correct projectId
     } catch (e) {
-      console.log('[Notifications] Push registration error (demo continues with local only):', e);
-      // Fallback: still allow local notifications
+      console.log('[Notifications] Push registration error (continuing without push):', e);
     }
   },
   sendLocalNotification: async (title, body, data = {}) => {
