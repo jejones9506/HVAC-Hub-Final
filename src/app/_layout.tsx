@@ -9,6 +9,7 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
+    // Initialize auth + Supabase session persistence on app start (Step 2)
     initializeApp();
   }, []);
 
