@@ -1350,43 +1350,13 @@ export const useHVACStore = create<HVACState>((set, get) => ({
     return result;
   },
 
-  // Push Notifications (Step 13 - Real Expo + Supabase fallback)
+ // Push Notifications (Step 13 - Real Expo + Supabase fallback) - STUBBED to prevent crash on placeholder projectId in standalone APK
   pushToken: null,
-   registerForPushNotifications: async () => {
-    try {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        console.log('[Notifications] Permission not granted for push');
-        return;
-      }
-      console.log('[Notifications] Push permission granted (token registration temporarily disabled for stability)');
-      // Real token registration will be restored later with the correct projectId
-    } catch (e) {
-      console.log('[Notifications] Push registration error (continuing without push):', e);
-    }
+  registerForPushNotifications: async () => {
+    console.log('[Notifications] Push registration skipped (placeholder projectId removed to prevent launch crash in standalone APK)');
+    // Stub: local notifications still fully supported via sendLocalNotification (no real push token fetch)
+    set({ pushToken: 'demo-token-local-only' });
   },
-  sendLocalNotification: async (title, body, data = {}) => {
-    try {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title,
-          body,
-          data,
-          sound: true,
-        },
-        trigger: null, // immediate
-      });
-      console.log('[Notifications] Local notification sent:', title);
-    } catch (e) {
-      console.log('[Notifications] Local send failed (web fallback ok):', e);
-    }
-  },
-
   // Step 15: Offline caching (using SecureStore/Async fallback), QR lookup, gamification, job logger
   badges: [],
   awardBadge: (badge) => {
